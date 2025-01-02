@@ -1,0 +1,167 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+     
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white; 
+}
+
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 50px;
+    background-color: transparent; 
+    position: fixed; 
+    width: 100%;
+    z-index: 1000;
+    margin-top: 5px;
+}
+
+.header .logo img {
+    width: 150px;
+    height: auto;
+    margin-left: 0px;
+}
+
+.nav-menu ul {
+    list-style: none;
+    display: flex;
+}
+
+.nav-menu ul li {
+    margin-right: 100px;
+}
+
+.nav-menu ul li a {
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 700;
+    color: white; 
+    transition: color 0.3s ease, transform 0.3s ease; 
+}
+
+ul li a.active,
+ul li a:hover {
+    color: red; 
+    border-bottom: 3px solid red;
+    transform: scale(1.1);
+}
+
+
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    /* background-image: url('../img/car-background.png');
+    background-size: cover;
+     */
+   
+
+}
+
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    margin-right:60%;
+    margin-top: -80px;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    margin-right:70%;
+}
+
+.hero h1 span,
+.hero p span {
+    color: red; 
+    font-family: 'Georgia', serif; 
+    font-style: italic;
+}
+
+nav.header .burger-menu {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+nav.header .burger-menu span {
+    background-color: #fff;
+    height: 3px;
+    width: 25px;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    nav.header .nav-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background-color: #2c3e50;
+        border-radius: 8px;
+        width: 200px;
+        padding: 10px;
+        z-index: 10;
+    }
+
+    nav.header .nav-menu ul {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav.header .nav-menu ul li {
+        margin: 10px 0;
+    }
+
+    nav.header .burger-menu {
+        display: flex;
+    }
+
+
+    nav.header .burger-menu.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    nav.header .burger-menu.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    nav.header .burger-menu.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    nav.header .nav-menu.active {
+        display: flex;
+    }
+
+    .hero h1{
+        font-size: 30px;
+    }
+
+    .hero p{
+        font-size: 15px;
+    }
+
+    .hero{
+        margin-left: 20px;
+    }
+}
+
+
+
