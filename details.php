@@ -1,9 +1,35 @@
+<?php
+session_start();
+require_once "classes/Database.php";
+require_once "classes/vehicle.php";
+
+// Check if the ID is provided in the URL
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    echo "Vehicle ID not provided.";
+    exit;
+}
+
+$idVehicule = $_GET['id'];
+
+// Initialize database and vehicle model
+$db = (new Database())->getConnection();
+$vehicleModel = new Vehicle($db);
+
+// Fetch the vehicle details
+$vehicle = $vehicleModel->getVehicleById($idVehicule);
+
+if (!$vehicle) {
+    echo "Vehicle not found.";
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drive & Loc</title>
+    <title>Vehicle Details - Drive & Loc</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -19,10 +45,10 @@
         <div class="container mx-auto flex items-center justify-between py-4 px-6">
             <div class="flex items-center">
                 <img src="img/logooo.png" alt="Car Logo" class="h-10 mr-3">
-                <a href="./home.html" class="text-lg font-bold text-custom">Drive & Loc</a>
+                <a href="index.php" class="text-lg font-bold text-custom">Drive & Loc</a>
             </div>
             <ul class="hidden md:flex space-x-6 text-gray-800">
-                <li><a href="./home.html" class="text-black hover:text-custom">Home</a></li>
+                <li><a href="index.php" class="text-black hover:text-custom">Home</a></li>
                 <li><a href="details.php" class="text-black hover:text-custom">Details</a></li>
                 <li><a href="vehicle.php" class="text-black hover:text-custom">Cars</a></li>
                 <li><a href="./Contrats/contrats.php" class="text-black hover:text-custom">Contrats</a></li>
@@ -38,16 +64,15 @@
                 <div class="w-full max-w-4xl bg-gray-50 p-6 rounded-lg shadow-lg">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
-                            <img src="img/car-detail.jpg" alt="Car" class="rounded-lg shadow-lg w-full mb-4">
+                            <img src="img/<?= htmlspecialchars($vehicle['image']) ?>" alt="<?= htmlspecialchars($vehicle['modele']) ?>" class="rounded-lg shadow-lg w-full mb-4">
                         </div>
                         <div class="flex flex-col justify-between">
-                            <h3 class="text-2xl font-bold text-black mb-4">2024 Toyota Camry</h3>
-                            <p class="text-lg text-gray-700 mb-4">A comfortable sedan with great performance and fuel efficiency, perfect for long trips and city driving.</p>
+                            <h3 class="text-2xl font-bold text-black mb-4"><?= htmlspecialchars($vehicle['modele']) ?></h3>
                             <div class="text-lg text-black font-bold mb-4">
-                                <p>Price: $50/day</p>
-                                <p>Availability: In Stock</p>
+                                <p>Price: $<?= htmlspecialchars($vehicle['prixParJour']) ?>/day</p>
+                                <p>Availability: <?= htmlspecialchars($vehicle['disponibilite']) ?></p>
                             </div>
-                            <a href="book-now.html" class="px-6 py-3 bg-custom text-white rounded-full hover:bg-gray-700">Book Now</a>
+                            <a href="reservation.php?id=<?= htmlspecialchars($vehicle['idVehicule']) ?>" class="px-6 py-3 bg-custom text-white rounded-full hover:bg-gray-700">Book Now</a>
                         </div>
                     </div>
                 </div>

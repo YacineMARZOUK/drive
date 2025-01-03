@@ -45,30 +45,22 @@ if (isset($_SESSION['idClient'])) {
         <div class="container mx-auto">
             <h2 class="text-3xl font-bold text-custom mb-8 text-center">Make a Reservation</h2>
 
-            <form action="classes/reservation.php" method="POST" class="max-w-lg mx-auto bg-gray-100 p-8 rounded-lg shadow-lg">
+            <form action="classes/reservation.php?id=<?php echo $_GET['id']; ?>" method="POST" class="max-w-lg mx-auto bg-gray-100 p-8 rounded-lg shadow-lg">
                 <!-- Vehicle Selection -->
-                <div class="mb-4">
-                    <label for="vehicle" class="block text-lg font-semibold text-gray-700">Select Vehicle</label>
-                    <select id="vehicle" name="vehicle" class="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg" required>
-                        <option value="Toyota Corolla">Toyota Corolla</option>
-                        <option value="Ford Explorer">Ford Explorer</option>
-                        <option value="Chevrolet Silverado">Chevrolet Silverado</option>
-                        <option value="Tesla Model S">Tesla Model S</option>
-                    </select>
-                </div>
+                
 
                 <!-- Rental Dates -->
                 <div class="mb-4">
                  <label for="date-start" class="block text-lg font-semibold text-gray-700">Start Date</label>
-                           <input type="date" id="date-start" name="date-start" class="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg" required>
+                           <input type="date" id="date-start" name="date-start" class="w-full px-4 py-2 mt-2 border border-gray-300 text-black rounded-lg"placeholder="Start Date" required>
                 </div>
                 <div class="mb-4">
                   <label for="date-end" class="block text-lg font-semibold text-gray-700">End Date</label>
-                  <input type="date" id="date-end" name="date-end" class="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg" required>
+                  <input type="date" id="date-end" name="date-end" class="w-full px-4 py-2 mt-2 border border-gray-300 text-black rounded-lg"placeholder="End Date" required>
                 </div>
                 <div class="mb-4">
                   <label for="pickup-location" class="block text-lg font-semibold text-gray-700">Pick-Up Location</label>
-                  <input type="text" id="pickup-location" name="pickup-location" class="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg" placeholder="Enter pick-up location" required>
+                  <input type="text" id="pickup-location" name="pickup-location" class="w-full px-4 py-2 mt-2 bordertext-black border-gray-300 rounded-lg" placeholder="Enter pick-up location" required>
                 </div>
 
                 <!-- Submit Button -->

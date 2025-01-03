@@ -8,63 +8,76 @@ if (isset($_SESSION['idClient'])) {
     echo "User not signed in.";
 }
 require_once "Database.php";
-class reservation{
-
-    private $id;
+class Reservation {
     private $idClient;
     private $idVehicule;
-    private $fullname;
-    private $email;
-    private $selectVehicle;
-    private $startDate;
-    private $endDate;
+    private $dateDebut;
+    private $dateFin;
     private $lieuPriseEnCharge;
     private $statutReservation;
 
-
-    public function __construct($idClient ,$idVehicule,$dateDebut,$dateFin,$lieuPriseEnCharge,$statutReservation){
-        $this->idClient= $idClient ;
-        $this->idVehicule=$idVehicule;
-        $this->dateDebut=$dateDebut;
-        $this->dateFin=$dateFin;
-        $this->lieuPriseEnCharge=$lieuPriseEnCharge;
-        $this->statutReservation=$statutReservation;
-
+    public function __construct($idClient, $idVehicule, $dateDebut, $dateFin, $lieuPriseEnCharge, $statutReservation = 'pending') {
+        $this->idClient = $idClient;
+        $this->idVehicule = $idVehicule;
+        $this->dateDebut = $dateDebut;
+        $this->dateFin = $dateFin;
+        $this->lieuPriseEnCharge = $lieuPriseEnCharge;
+        $this->statutReservation = $statutReservation;
     }
 
-    public function createReservation($pdo){
+    public function createReservation($pdo) {
         try {
-            $stmt=$pdo->prepare("INSERT INTO reservation (idClient,idVehicule,dateDebut,dateFin,lieuPriseEnCharge,statutReservation) VALUES (?,?,?,?,?,?)");
-            $stmt->execute([$this->idClient,$this->idVehicule, $this->dateDebut, $this->dateFin,$this->lieuPriseEnCharge, $this->statutReservation]);
+            $stmt = $pdo->prepare("INSERT INTO reservation (idClient, idVehicule, dateDebut, dateFin, lieuPriseEnCharge, statutReservation) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([
+            $this->idClient,
+            $this->idVehicule,
+            $this->dateDebut,
+            $this->dateFin,
+            $this->lieuPriseEnCharge,
+            $this->statutReservation
+            ]);
+
             return 202;
-        } catch (Exception $e ) {
+        } catch (Exception $e) {
             return 404;
-        
         }
     }
 
-  
+    public static function afficherReservationsClient($pdo, $idClient) {
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM reservation WHERE idClient = ?");
+            $stmt->execute([$idClient]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return 404;
+        }
+    }
 
+    public static function deleteReservation($pdo, $id) {
+        try {
+            $stmt = $pdo->prepare("DELETE FROM reservation WHERE idReservation = ?");
+            $stmt->execute([$id]);
+            return 202;
+        } catch (Exception $e) {
+            return 404;
+        }
+    }
 }
 
+
+$database = new Database();
+$pdo = $database->getConnection();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Capture form data
-    $vehicle = $_POST['vehicle'];
     $startDate = $_POST['date-start'];
     $endDate = $_POST['date-end'];
     $pickupLocation = $_POST['pickup-location'];
-
-    // Assuming you have the vehicle ID stored somewhere (you can modify it based on your database structure)
-    $idVehicule = 1; // This is a placeholder; replace it with the correct ID based on the vehicle selected.
-
-    // Create a new reservation object
-    $reservation = new reservation(null, $idClient, $idVehicule, $startDate, $endDate, $pickupLocation, 'Pending');
-
-    // Insert reservation into the database
-    $result = $reservation->createReservation($idClient, $idVehicule, $startDate, $endDate, $pickupLocation, 'Pending');
-
+    $idVehicule = $_GET['id'];
+    $reservation = new Reservation($idClient, $idVehicule, $startDate, $endDate, $pickupLocation, 'Pending');
+    $result = $reservation->createReservation($pdo);
     if ($result === 202) {
         echo "Reservation successful!";
+        header('Location: ../clientTab.php');
     } else {
         echo "Error occurred while making the reservation.";
     }

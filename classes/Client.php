@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once "Database.php";
-require_once "../vehicle.php";
+require_once "vehicle.php";
 
 $db = (new Database())->getConnection(); 
 $vehicleModel = new Vehicle($db);
