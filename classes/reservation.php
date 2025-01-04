@@ -1,6 +1,7 @@
 <?php
-session_start();
-
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 if (isset($_SESSION['idClient'])) {
     $idClient = $_SESSION['idClient'];
    
@@ -76,8 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $reservation = new Reservation($idClient, $idVehicule, $startDate, $endDate, $pickupLocation, 'Pending');
     $result = $reservation->createReservation($pdo);
     if ($result === 202) {
-        echo "Reservation successful!";
         header('Location: ../clientTab.php');
+        exit;
     } else {
         echo "Error occurred while making the reservation.";
     }

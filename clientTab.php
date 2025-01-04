@@ -8,11 +8,14 @@ if (isset($_SESSION['idClient'])) {
     exit;
 }
 
-$idVehicule = isset($_GET['id']) ? $_GET['id'] : null;
-if (!$idVehicule) {
-    echo "No vehicle ID specified.";
-    exit;
-}
+require_once "<classes/Database.php";
+require_once "classes/reservation.php";
+
+$database = new Database();
+$pdo = $database->getConnection();
+
+// Fetch the reservations for the client
+$reservations = Reservation::afficherReservationsClient($pdo, $idClient);
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +23,7 @@ if (!$idVehicule) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation - Drive & Loc</title>
+    <title>Your Reservations - Drive & Loc</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -48,29 +51,41 @@ if (!$idVehicule) {
         </div>
     </nav>
 
-    <!-- Reservation Form -->
+    <!-- Client Reservations Table -->
     <section class="py-16 bg-white">
         <div class="container mx-auto">
-            <h2 class="text-3xl font-bold text-custom mb-8 text-center">Make a Reservation</h2>
+            <h2 class="text-3xl font-bold text-custom mb-8 text-center">Your Reservations</h2>
 
-            <form action="classes/reservation.php?id=<?php echo $idVehicule; ?>" method="POST" class="mx-auto bg-gray-100 p-8 rounded-lg shadow-lg" style="max-width: 500px;">
-     <!-- Rental Dates -->
-                <div class="mb-4">
-                    <label for="date-start" class="block text-lg font-semibold text-gray-700">Start Date</label>
-                    <input type="date" id="date-start" name="date-start" class="w-full px-4 py-2 mt-2 border border-gray-300 text-black rounded-lg" placeholder="Start Date" required>
-                </div>
-                <div class="mb-4">
-                    <label for="date-end" class="block text-lg font-semibold text-gray-700">End Date</label>
-                    <input type="date" id="date-end" name="date-end" class="w-full px-4 py-2 mt-2 border border-gray-300 text-black rounded-lg" placeholder="End Date" required>
-                </div>
-                <div class="mb-4">
-                    <label for="pickup-location" class="block text-lg font-semibold text-gray-700">Pick-Up Location</label>
-                    <input type="text" id="pickup-location" name="pickup-location" class="w-full px-4 py-2 mt-2 border text-black border-gray-300 rounded-lg" placeholder="Enter pick-up location" required>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" class="w-full px-6 py-3 bg-custom text-white rounded-full hover:bg-gray-700">Submit Reservation</button>
-            </form>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-lg">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2 text-lg font-semibold text-gray-700 border-b">Vehicle</th>
+                            <th class="px-4 py-2 text-lg font-semibold text-gray-700 border-b">Start Date</th>
+                            <th class="px-4 py-2 text-lg font-semibold text-gray-700 border-b">End Date</th>
+                            <th class="px-4 py-2 text-lg font-semibold text-gray-700 border-b">Pick-Up Location</th>
+                            <th class="px-4 py-2 text-lg font-semibold text-gray-700 border-b">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if ($reservations !== 404 && !empty($reservations)): ?>
+                            <?php foreach ($reservations as $reservation): ?>
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-800 border-b"><?= $reservation['idVehicule'] ?></td>
+                                    <td class="px-4 py-2 text-gray-800 border-b"><?= $reservation['dateDebut'] ?></td>
+                                    <td class="px-4 py-2 text-gray-800 border-b"><?= $reservation['dateFin'] ?></td>
+                                    <td class="px-4 py-2 text-gray-800 border-b"><?= $reservation['lieuPriseEnCharge'] ?></td>
+                                    <td class="px-4 py-2 text-gray-800 border-b"><?= ucfirst($reservation['statutReservation']) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="6" class="px-4 py-2 text-gray-800 text-center border-b">No reservations found.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </section>
 

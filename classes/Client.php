@@ -150,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
                             <td class="py-2 px-4 border-b border-gray-300"><?= htmlspecialchars($vehicle['disponibilite']) ?></td>
                             <td class="py-2 px-4 border-b border-gray-300">$<?= htmlspecialchars($vehicle['prixParJour']) ?></td>
                             <td class="py-2 px-4 border-b border-gray-300">
-                                <a href="../reservation.php" class="px-4 py-2 bg-custom text-white rounded hover:bg-gray-700">Book Now</a>
+                            <a href="../reservation.php?id=<?= htmlspecialchars($vehicle['idVehicule']) ?>" class="px-4 py-2 bg-custom text-white rounded hover:bg-gray-700">Book Now</a>
                                 <a href="../details.php?id=<?= htmlspecialchars($vehicle['idVehicule']) ?>" class="px-4 py-2 bg-custom text-white rounded hover:bg-gray-700">Details</a>
                             </td>
                         </tr>
@@ -164,6 +164,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
         </table>
     </div>
 </section>
+<form action="review.php" method="POST">
+    <input type="hidden" name="idClient" value="<?php echo $idClient; ?>"> <!-- Use dynamic client ID -->
+    <input type="hidden" name="idVehicule" value="<?php echo $idVehicule; ?>"> <!-- Use dynamic vehicle ID -->
+
+    <label for="commentaire">Commentaire:</label><br>
+    <textarea name="commentaire" id="commentaire" rows="4" required></textarea><br><br>
+
+    <label for="note">Note (1-5):</label><br>
+    <select name="note" id="note" required>
+        <option value="1">1 - Très mauvais</option>
+        <option value="2">2 - Mauvais</option>
+        <option value="3">3 - Moyen</option>
+        <option value="4">4 - Bon</option>
+        <option value="5">5 - Excellent</option>
+    </select><br><br>
+
+    <button type="submit">Envoyer le commentaire</button>
+</form>
+
 
     <!-- Footer -->
     <footer class="bg-black text-white py-8">
