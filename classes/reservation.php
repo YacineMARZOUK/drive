@@ -63,6 +63,17 @@ class Reservation {
             return 404;
         }
     }
+    public static function afficherAllReservation($pdo) {
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM reservation");
+            $stmt->execute(); 
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return 404; 
+        }
+    }
+    
+
 }
 
 

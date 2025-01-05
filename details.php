@@ -3,7 +3,6 @@ session_start();
 require_once "classes/Database.php";
 require_once "classes/vehicle.php";
 
-// Check if the ID is provided in the URL
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     echo "Vehicle ID not provided.";
     exit;
@@ -11,11 +10,9 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $idVehicule = $_GET['id'];
 
-// Initialize database and vehicle model
 $db = (new Database())->getConnection();
 $vehicleModel = new Vehicle($db);
 
-// Fetch the vehicle details
 $vehicle = $vehicleModel->getVehicleById($idVehicule);
 
 if (!$vehicle) {

@@ -38,7 +38,7 @@
             <!-- Sign Up Form -->
             <div id="signUpForm" class="space-y-6 hidden mt-8">
                 <h3 class="text-2xl font-bold text-gray-800 mb-4">Sign Up</h3>
-                <form action="../classes/Client.php" method="POST" class="max-w-md mx-auto bg-white p-6 shadow-lg rounded-lg space-y-6">
+                <form action="signup.php" method="POST" class="max-w-md mx-auto bg-white p-6 shadow-lg rounded-lg space-y-6">
                     <input type="hidden" name="action" value="signup">
                     <div>
                         <label for="nom" class="block text-left text-gray-700">Full Name</label>
@@ -67,7 +67,7 @@
             <!-- Sign In Form -->
             <div id="signInForm" class="space-y-6 hidden mt-8">
                 <h3 class="text-2xl font-bold text-gray-800 mb-4">Sign In</h3>
-                <form action="../classes/Client.php" method="POST" class="max-w-md mx-auto bg-white p-6 shadow-lg rounded-lg space-y-6">
+                <form action="signup.php" method="POST" class="max-w-md mx-auto bg-white p-6 shadow-lg rounded-lg space-y-6">
                     <input type="hidden" name="action" value="signin">
                     <div>
                         <label for="email_signin" class="block text-left text-gray-700">Email</label>

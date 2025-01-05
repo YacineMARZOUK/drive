@@ -14,7 +14,7 @@ class avis {
     public function ajouterAvis($idClient, $idVehicule, $commentaire, $note) {
         $sql = "INSERT INTO avis (idClient, idVehicule, commentaire, note) VALUES (?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$idClient, $idVehicule, $commentaire, $note]); // Added missing semicolon
+        return $stmt->execute([$idClient, $idVehicule, $commentaire, $note]); 
     }
 
     public function modifierAvis($idAvis, $commentaire, $note) {
@@ -33,6 +33,12 @@ class avis {
         $sql = "SELECT * FROM avis WHERE idClient = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$idClient]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getAllAvis() {
+        $sql = "SELECT * FROM avis";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     

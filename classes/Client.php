@@ -27,54 +27,22 @@ class Client {
     
 
     public function signIn($email, $password) {
-        $sql = "SELECT * FROM client WHERE email = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$email]);
-        
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($user && password_verify($password, $user['password'])) {
-            
-            $_SESSION['idClient'] = $user['idClient'];
-            return true; 
-        }
-    
-        return false; 
+    $query = $this->db->prepare("SELECT idClient, password FROM client WHERE email = :email");
+    $query->bindParam(':email', $email, PDO::PARAM_STR);
+    $query->execute();
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+
+    if ($result && password_verify($password, $result['password'])) {
+        return $result['idClient'];
     }
-    
+    return false;
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
-    $action = $_POST['action'];
-    $nom = $_POST["nom"] ?? null;
-    $email = $_POST["email"] ?? null;
-    $password = $_POST["password"] ?? null;
-    $adresse = $_POST["adresse"] ?? null;
-    $telephone = $_POST["telephone"] ?? null;
-    $email_l = $_POST["email_l"] ?? null;
-    $password_l = $_POST["password_l"] ?? null;
-
-    $db = (new Database())->getConnection();
-
-    if ($action === "signup" && isset($nom, $email, $password, $adresse, $telephone)) {
-        $dd = new Client($db); 
-        if ($dd->signUp($nom, $email, $password, $adresse, $telephone)) {
-            echo "Sign-up successful!";
-        } else {
-            echo "Sign-up failed.";
-        }
     }
+    
 
-    if ($action === "signin" && isset($email_l, $password_l)) {
-        $bb = new Client($db);
-        if ($bb->signIn($email_l, $password_l)) {
-            header("Location: ../classes/Client.php"); 
-         
-        } else {
-            echo "Sign-in failed. Please check your credentials.";
-        }
-    }
-}
+
+
 
 ?>
 <!DOCTYPE html>
@@ -164,24 +132,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
         </table>
     </div>
 </section>
-<form action="review.php" method="POST">
-    <input type="hidden" name="idClient" value="<?php echo $idClient; ?>"> <!-- Use dynamic client ID -->
-    <input type="hidden" name="idVehicule" value="<?php echo $idVehicule; ?>"> <!-- Use dynamic vehicle ID -->
+<form action="review.php" method="POST" class="bg-white shadow-lg rounded-lg p-6 max-w-md mx-auto">
+    <input type="hidden" name="idClient" value="<?php echo $idClient; ?>">
+    <input type="hidden" name="idVehicule" value="<?php echo $idVehicule; ?>">
 
-    <label for="commentaire">Commentaire:</label><br>
-    <textarea name="commentaire" id="commentaire" rows="4" required></textarea><br><br>
+    <label for="commentaire" class="block text-gray-700 font-medium mb-2">Commentaire:</label>
+    <textarea 
+        name="commentaire" 
+        id="commentaire" 
+        rows="4" 
+        class="w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-custom focus:border-transparent px-3 py-2"
+        placeholder="Écrivez votre commentaire ici..." 
+        required
+    ></textarea>
 
-    <label for="note">Note (1-5):</label><br>
-    <select name="note" id="note" required>
+    <label for="note" class="block text-gray-700 font-medium mt-4 mb-2">Note (1-5):</label>
+    <select 
+        name="note" 
+        id="note" 
+        class="w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-custom focus:border-transparent px-3 py-2"
+        required
+    >
         <option value="1">1 - Très mauvais</option>
         <option value="2">2 - Mauvais</option>
         <option value="3">3 - Moyen</option>
         <option value="4">4 - Bon</option>
         <option value="5">5 - Excellent</option>
-    </select><br><br>
+    </select>
 
-    <button type="submit">Envoyer le commentaire</button>
+    <button 
+        type="submit" 
+        class="mt-6 w-full bg-custom text-white font-medium py-2 rounded-lg hover:bg-red-700 transition duration-300"
+    >
+        Envoyer le commentaire
+    </button>
 </form>
+
 
 
     <!-- Footer -->
