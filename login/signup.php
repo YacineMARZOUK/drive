@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
                 echo '<script>window.location.href = "../admin/allReservation.php";</script>';
                 exit();
             } else {
-                echo '<script>window.location.href = "client.php";</script>';
+                echo '<script>window.location.href = "../classes/client.php";</script>';
                 exit();
             }
         } else {
