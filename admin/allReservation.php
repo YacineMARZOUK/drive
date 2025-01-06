@@ -53,6 +53,67 @@ $avisList = $avisObj->getAllAvis();
                 </ul>
             </div>
         </nav>
+        <!-- Button to Show Add Vehicle Form -->
+<div class="container mx-auto mt-8 text-center">
+    <button id="addVehicleBtn" class="bg-custom text-white px-4 py-2 rounded hover:bg-red-600">
+        Add Vehicle
+    </button>
+</div>
+
+<!-- Add Vehicle Form -->
+<div id="addVehicleForm" class="container mx-auto mt-8 hidden">
+    <form action="add_vehicle.php" method="POST" class="bg-white p-6 rounded shadow-md">
+        <h2 class="text-2xl font-bold mb-4">Add a New Vehicle</h2>
+        
+        <!-- Modele -->
+        <div class="mb-4">
+            <label for="modele" class="block text-gray-700 font-medium mb-2">Modele:</label>
+            <input type="text" id="modele" name="modele" class="w-full border border-gray-300 rounded px-3 py-2" required>
+        </div>
+        
+        <!-- Prix Par Jour -->
+        <div class="mb-4">
+            <label for="prixParJour" class="block text-gray-700 font-medium mb-2">Prix Par Jour:</label>
+            <input type="number" step="0.01" id="prixParJour" name="prixParJour" class="w-full border border-gray-300 rounded px-3 py-2" required>
+        </div>
+        
+        <!-- Disponibilite -->
+        <div class="mb-4">
+            <label for="disponibilite" class="block text-gray-700 font-medium mb-2">Disponibilite:</label>
+            <select id="disponibilite" name="disponibilite" class="w-full border border-gray-300 rounded px-3 py-2">
+                <option value="1">Available</option>
+                <option value="0">Not Available</option>
+            </select>
+        </div>
+        
+        <!-- Categorie -->
+        <div class="mb-4">
+            <label for="idCategorie" class="block text-gray-700 font-medium mb-2">Categorie:</label>
+            <select id="idCategorie" name="idCategorie" class="w-full border border-gray-300 rounded px-3 py-2" required>
+                <?php
+                $categories = $pdo->query("SELECT * FROM categorie")->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($categories as $categorie) {
+                    echo "<option value='{$categorie['idCategorie']}'>{$categorie['nomCategorie']}</option>";
+                }
+                ?>
+            </select>
+        </div>
+        
+        <!-- Submit Button -->
+        <button type="submit" class="bg-custom text-white px-4 py-2 rounded hover:bg-red-600">Add Vehicle</button>
+    </form>
+</div>
+
+<script>
+    // JavaScript to Toggle Add Vehicle Form
+    const addVehicleBtn = document.getElementById('addVehicleBtn');
+    const addVehicleForm = document.getElementById('addVehicleForm');
+    
+    addVehicleBtn.addEventListener('click', () => {
+        addVehicleForm.classList.toggle('hidden');
+    });
+</script>
+
 
 <!-- All Reservations -->
 <section class="py-16 bg-white">
